@@ -181,4 +181,10 @@ public class AccountResource {
                 password.length() > ManagedUserVM.PASSWORD_MAX_LENGTH
         );
     }
+
+    @GetMapping("/user/me")
+    public User getUser() {
+        Optional<User> user = userService.getUserWithAuthorities();
+        return user.orElse(null);
+    }
 }
