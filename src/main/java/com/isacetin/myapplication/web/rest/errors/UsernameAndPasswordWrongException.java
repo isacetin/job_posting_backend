@@ -1,10 +1,9 @@
 package com.isacetin.myapplication.web.rest.errors;
 
+import java.net.URI;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.ErrorResponseException;
 import tech.jhipster.web.rest.errors.ProblemDetailWithCause;
-
-import java.net.URI;
 
 public class UsernameAndPasswordWrongException extends ErrorResponseException {
 
@@ -22,7 +21,7 @@ public class UsernameAndPasswordWrongException extends ErrorResponseException {
             ProblemDetailWithCause.ProblemDetailWithCauseBuilder.instance()
                 .withStatus(HttpStatus.BAD_REQUEST.value())
                 .withType(type)
-                .withDetail("Wrong username or password")
+                .withDetail("Kullanıcı adı veya parola hatalı")
                 .withTitle(defaultMessage)
                 .withProperty("message", "error." + errorKey)
                 .withProperty("params", entityName)

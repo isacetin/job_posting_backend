@@ -22,7 +22,21 @@ spring:
       on-profile: '!api-docs'
 springdoc:
   api-docs:
-    enabled: false
+    path: /v3/api-docs
+    enabled: true
+  swagger-ui:
+    path: /swagger-ui.html
+    operationsSorter: method
+    tagsSorter: alpha
+    tryItOutEnabled: true
+    filter: true
+    urls[0]:
+      name: V3 API Docs
+      url: /v3/api-docs
+  show-actuator: true
+  default-produces-media-type: application/json
+  default-consumes-media-type: application/json
+  packages-to-scan: com.isacetin.myapplication.web.rest
 ---
 management:
   endpoints:
@@ -99,16 +113,11 @@ spring:
       lifecycle-management: start-only
       file: src/main/docker/services.yml
   profiles:
-    # The commented value for `active` can be replaced with valid Spring profiles to load.
-    # Otherwise, it will be filled in by maven when building the JAR file
-    # Either way, it can be overridden by `--spring.profiles.active` value passed in the commandline or `-Dspring.profiles.active` set in `JAVA_OPTS`
-    active: '@spring.profiles.active@'
+    active: dev
     group:
       dev:
         - dev
         - api-docs
-        # Uncomment to activate TLS for the dev profile
-        #- tls
   jmx:
     enabled: false
   data:
@@ -145,6 +154,10 @@ spring:
     problemdetails:
       enabled: true
   security:
+    user:
+      name: admin
+      password: admin
+      roles: ADMIN
     oauth2:
       resourceserver:
         jwt:
@@ -168,7 +181,9 @@ spring:
       console-available: true
 
 server:
+  port: 8080
   servlet:
+    context-path: /
     session:
       cookie:
         http-only: true
@@ -190,29 +205,25 @@ info:
 jhipster:
   clientApp:
     name: 'myapplicationApp'
-  # By default CORS is disabled. Uncomment to enable.
-  # cors:
-  #   allowed-origins: "http://localhost:8100,http://localhost:9000"
-  #   allowed-methods: "*"
-  #   allowed-headers: "*"
-  #   exposed-headers: "Authorization,Link,X-Total-Count,X-${jhipster.clientApp.name}-alert,X-${jhipster.clientApp.name}-error,X-${jhipster.clientApp.name}-params"
-  #   allow-credentials: true
-  #   max-age: 1800
   mail:
     from: myapplication@localhost
+    base-url: http://127.0.0.1:8080
   api-docs:
     default-include-pattern: /api/**
     management-include-pattern: /management/**
     title: Myapplication API
     description: Myapplication API documentation
     version: 0.0.1
-    terms-of-service-url:
-    contact-name:
-    contact-url:
-    contact-email:
-    license: unlicensed
-    license-url:
   security:
+    authentication:
+      jwt:
+        # This token must be encoded using Base64 and be at least 256 bits long (you can type `openssl rand -base64 64` on your command line to generate a 512 bits one)
+        base64-secret: YzM5ZjZiYWU2ZDU3ZTg4ZjE4ZjhjNzYyZDQ5YzQ0ZDk4MzFhZjU4NmM0ZmNmZGFjY2E5YTVlNjE4ZTM0ZDY0ZjM5ZDM4YzVmNGM4ZjY4ZGZhNzQyZDY3ZjFhODJiZDIxZWM1YjE3ZGNiYzA4YjE2MzM5NGYxNjc0OTI4YmU=
+        token-validity-in-seconds: 86400
+        token-validity-in-seconds-for-remember-me: 2592000
+    content-security-policy: "default-src 'self'; frame-src 'self' data:; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://storage.googleapis.com; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:"
+    remember-me:
+      key: 41b3f0c8bc967051ad5f24e458447b4fb8a2f0f8c1bb6e1f924f1e61c1971d503c6faeb69
 # ===================================================================
 # Application specific properties
 # Add your own application properties here, see the ApplicationProperties class

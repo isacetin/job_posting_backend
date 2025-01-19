@@ -11,9 +11,7 @@ import com.isacetin.myapplication.web.rest.errors.*;
 import com.isacetin.myapplication.web.rest.vm.KeyAndPasswordVM;
 import com.isacetin.myapplication.web.rest.vm.ManagedUserVM;
 import jakarta.validation.Valid;
-
 import java.util.*;
-
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -149,8 +147,7 @@ public class AccountResource {
         if (user.isPresent()) {
             mailService.sendPasswordResetMail(user.orElseThrow());
         } else {
-            // Pretend the request has been successful to prevent checking which emails really exist
-            // but log that an invalid attempt has been made
+            // Güvenlik için kullanıcı bulunamasa bile başarılı gibi davranır
             LOG.warn("Password reset requested for non existing mail");
         }
     }
@@ -177,8 +174,8 @@ public class AccountResource {
     private static boolean isPasswordLengthInvalid(String password) {
         return (
             StringUtils.isEmpty(password) ||
-                password.length() < ManagedUserVM.PASSWORD_MIN_LENGTH ||
-                password.length() > ManagedUserVM.PASSWORD_MAX_LENGTH
+            password.length() < ManagedUserVM.PASSWORD_MIN_LENGTH ||
+            password.length() > ManagedUserVM.PASSWORD_MAX_LENGTH
         );
     }
 }

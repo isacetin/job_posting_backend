@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd
+                        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+    <changeSet id="20240119000000-1" author="isacetin">
+        <createTable tableName="job_posting">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="title" type="varchar(100)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="text">
+                <constraints nullable="false"/>
+            </column>
+            <column name="requirements" type="text"/>
+            <column name="company_name" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="location" type="varchar(255)"/>
+            <column name="salary_range" type="varchar(255)"/>
+            <column name="created_date" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+            <column name="expiry_date" type="timestamp"/>
+            <column name="status" type="varchar(20)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_id" type="varchar(100)">
+                <constraints nullable="false" 
+                           foreignKeyName="fk_job_posting_user_id" 
+                           references="jhi_user(id)"/>
+            </column>
+        </createTable>
+    </changeSet>
+</databaseChangeLog> 

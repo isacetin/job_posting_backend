@@ -38,7 +38,7 @@
         <checkstyle.version>10.18.1</checkstyle.version>
         <git-commit-id-maven-plugin.version>9.0.1</git-commit-id-maven-plugin.version>
         <jacoco-maven-plugin.version>0.8.12</jacoco-maven-plugin.version>
-        <jhipster-framework.version>8.7.1</jhipster-framework.version>
+        <jhipster-framework.version>8.1.0</jhipster-framework.version>
         <jib-maven-plugin.architecture>amd64</jib-maven-plugin.architecture>
         <jib-maven-plugin.image>eclipse-temurin:17-jre-focal</jib-maven-plugin.image>
         <jib-maven-plugin.version>3.4.3</jib-maven-plugin.version>
@@ -179,6 +179,11 @@
             <version>${springdoc-openapi-starter-webmvc-api.version}</version>
         </dependency>
         <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+            <version>2.3.0</version>
+        </dependency>
+        <dependency>
             <groupId>com.fasterxml.jackson.datatype</groupId>
             <artifactId>jackson-datatype-hibernate6</artifactId>
         </dependency>
@@ -290,6 +295,23 @@
             <groupId>org.testcontainers</groupId>
             <artifactId>testcontainers</artifactId>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt-api</artifactId>
+            <version>0.11.5</version>
+        </dependency>
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt-impl</artifactId>
+            <version>0.11.5</version>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt-jackson</artifactId>
+            <version>0.11.5</version>
+            <scope>runtime</scope>
         </dependency>
     </dependencies>
 
@@ -519,22 +541,6 @@
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-site-plugin</artifactId>
                     <version>${maven-site-plugin.version}</version>
-                </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-surefire-plugin</artifactId>
-                    <version>${maven-surefire-plugin.version}</version>
-                    <configuration>
-                        <!-- Force alphabetical order to have a reproducible build -->
-                        <runOrder>alphabetical</runOrder>
-                        <excludes>
-                            <exclude>**/*IT*</exclude>
-                            <exclude>**/*IntTest*</exclude>
-                        </excludes>
-                        <systemPropertyVariables>
-                            <java.util.logging.config.file>src/test/resources/logback.xml</java.util.logging.config.file>
-                        </systemPropertyVariables>
-                    </configuration>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>

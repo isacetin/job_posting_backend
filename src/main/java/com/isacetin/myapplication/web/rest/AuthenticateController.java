@@ -7,12 +7,10 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.isacetin.myapplication.web.rest.errors.UsernameAndPasswordWrongException;
 import com.isacetin.myapplication.web.rest.vm.LoginVM;
 import jakarta.validation.Valid;
-
 import java.security.Principal;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.stream.Collectors;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -70,7 +68,7 @@ public class AuthenticateController {
             httpHeaders.setBearerAuth(jwt);
             return new ResponseEntity<>(new JWTToken(jwt), httpHeaders, HttpStatus.OK);
         } catch (Exception e) {
-            throw new UsernameAndPasswordWrongException("Wrong username or password", "userManagement", "idexists");
+            throw new UsernameAndPasswordWrongException("Kullanıcı adı veya parola hatalı", "userManagement", "idexists");
         }
     }
 

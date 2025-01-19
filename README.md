@@ -2,6 +2,208 @@
 
 This application was generated using JHipster 8.7.1, you can find documentation and help at [https://www.jhipster.tech/documentation-archive/v8.7.1](https://www.jhipster.tech/documentation-archive/v8.7.1).
 
+## API Documentation
+
+### Authentication
+
+#### Login
+
+**Endpoint:** `POST /api/authenticate`
+
+**Headers:**
+
+```
+Content-Type: application/json
+```
+
+**Request Body:**
+
+```json
+{
+  "username": "admin",
+  "password": "admin",
+  "rememberMe": true
+}
+```
+
+**Response (200 OK):**
+
+```json
+{
+  "id_token": "eyJhbGciOiJIUzUxMiJ9..."
+}
+```
+
+### Job Postings API
+
+#### 1. Create New Job Posting
+
+**Endpoint:** `POST /api/job-postings`
+
+**Headers:**
+
+```
+Authorization: Bearer {jwt_token}
+Content-Type: application/json
+```
+
+**Request Body:**
+
+```json
+{
+  "title": "Senior Java Developer",
+  "description": "We are looking for an experienced Java developer...",
+  "requirements": "- 5+ years Java experience\n- Spring Boot knowledge\n- PostgreSQL experience",
+  "companyName": "Tech Company Ltd",
+  "location": "İstanbul, Turkey",
+  "salaryRange": "30000-45000 TL",
+  "expiryDate": "2024-03-19T00:00:00Z"
+}
+```
+
+**Response (201 Created):**
+
+```json
+{
+  "id": 1,
+  "title": "Senior Java Developer",
+  "description": "We are looking for an experienced Java developer...",
+  "requirements": "- 5+ years Java experience\n- Spring Boot knowledge\n- PostgreSQL experience",
+  "companyName": "Tech Company Ltd",
+  "location": "İstanbul, Turkey",
+  "salaryRange": "30000-45000 TL",
+  "createdDate": "2024-01-19T19:45:23Z",
+  "expiryDate": "2024-03-19T00:00:00Z",
+  "status": "ACTIVE",
+  "user": {
+    "id": "1",
+    "login": "admin"
+  }
+}
+```
+
+#### 2. List All Active Job Postings
+
+**Endpoint:** `GET /api/job-postings`
+
+**Headers:**
+
+```
+Accept: application/json
+```
+
+**Response (200 OK):**
+
+```json
+[
+  {
+    "id": 1,
+    "title": "Senior Java Developer",
+    "description": "We are looking for an experienced Java developer...",
+    "requirements": "- 5+ years Java experience\n- Spring Boot knowledge\n- PostgreSQL experience",
+    "companyName": "Tech Company Ltd",
+    "location": "İstanbul, Turkey",
+    "salaryRange": "30000-45000 TL",
+    "createdDate": "2024-01-19T19:45:23Z",
+    "expiryDate": "2024-03-19T00:00:00Z",
+    "status": "ACTIVE",
+    "user": {
+      "id": "1",
+      "login": "admin"
+    }
+  }
+]
+```
+
+#### 3. List User's Own Job Postings
+
+**Endpoint:** `GET /api/job-postings/my-postings`
+
+**Headers:**
+
+```
+Authorization: Bearer {jwt_token}
+Accept: application/json
+```
+
+**Response (200 OK):**
+
+```json
+[
+  {
+    "id": 1,
+    "title": "Senior Java Developer"
+    // ... other fields
+  }
+]
+```
+
+#### 4. Get Job Posting Details
+
+**Endpoint:** `GET /api/job-postings/{id}`
+
+**Headers:**
+
+```
+Accept: application/json
+```
+
+**Response (200 OK):**
+
+```json
+{
+  "id": 1,
+  "title": "Senior Java Developer"
+  // ... other fields
+}
+```
+
+### Error Responses
+
+#### 401 Unauthorized
+
+```json
+{
+  "type": "https://www.jhipster.tech/problem/problem-with-message",
+  "title": "Unauthorized",
+  "status": 401,
+  "detail": "Authentication failed",
+  "path": "/api/job-postings/my-postings",
+  "message": "error.http.401"
+}
+```
+
+#### 404 Not Found
+
+```json
+{
+  "type": "https://www.jhipster.tech/problem/problem-with-message",
+  "title": "Not Found",
+  "status": 404,
+  "detail": "Job posting not found",
+  "path": "/api/job-postings/999",
+  "message": "error.http.404"
+}
+```
+
+#### 400 Bad Request
+
+```json
+{
+  "type": "https://www.jhipster.tech/problem/constraint-violation",
+  "title": "Method argument not valid",
+  "status": 400,
+  "detail": "Input validation failed",
+  "fieldErrors": [
+    {
+      "objectName": "jobPosting",
+      "field": "title",
+      "message": "Title is required"
+    }
+  ]
+}
+```
+
 ## Project Structure
 
 Node is required for generation and recommended for development. `package.json` is always generated for a better development experience with prettier, commit hooks, scripts and so on.
