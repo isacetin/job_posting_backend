@@ -1,6 +1,7 @@
 package com.isacetin.myapplication.service;
 
 import com.isacetin.myapplication.domain.JobPosting;
+import com.isacetin.myapplication.domain.User;
 import com.isacetin.myapplication.domain.enumeration.JobStatus;
 import com.isacetin.myapplication.repository.JobPostingRepository;
 import com.isacetin.myapplication.security.SecurityUtils;
@@ -35,7 +36,8 @@ public class JobPostingService {
 
     @Transactional(readOnly = true)
     public List<JobPosting> findByCurrentUser() {
-        return jobPostingRepository.findByUserIdOrderByCreatedDateDesc(userService.getUserWithAuthorities().orElseThrow().getId());
+        User currentUser = userService.getUserWithAuthorities().orElseThrow();
+        return jobPostingRepository.findByUserOrderByCreatedDateDesc(currentUser);
     }
 
     @Transactional(readOnly = true)

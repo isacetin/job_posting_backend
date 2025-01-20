@@ -54,8 +54,8 @@ public class JobPosting {
     @Schema(description = "Son başvuru tarihi")
     private Instant expiryDate;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
     @JsonIgnoreProperties(value = { "password", "email" })
     @Schema(description = "İlanı oluşturan kullanıcı")
     private User user;
