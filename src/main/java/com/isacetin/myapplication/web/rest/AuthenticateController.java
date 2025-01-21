@@ -4,6 +4,9 @@ import static com.isacetin.myapplication.security.SecurityUtils.AUTHORITIES_KEY;
 import static com.isacetin.myapplication.security.SecurityUtils.JWT_ALGORITHM;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.isacetin.myapplication.domain.User;
+import com.isacetin.myapplication.service.UserService;
+import com.isacetin.myapplication.service.dto.AuthResponseDTO;
 import com.isacetin.myapplication.web.rest.errors.UsernameAndPasswordWrongException;
 import com.isacetin.myapplication.web.rest.vm.LoginVM;
 import jakarta.validation.Valid;
@@ -39,6 +42,7 @@ public class AuthenticateController {
     private static final Logger LOG = LoggerFactory.getLogger(AuthenticateController.class);
 
     private final JwtEncoder jwtEncoder;
+    private final UserService userService;
 
     @Value("${jhipster.security.authentication.jwt.token-validity-in-seconds:0}")
     private long tokenValidityInSeconds;
@@ -48,13 +52,18 @@ public class AuthenticateController {
 
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
 
-    public AuthenticateController(JwtEncoder jwtEncoder, AuthenticationManagerBuilder authenticationManagerBuilder) {
+    public AuthenticateController(
+        JwtEncoder jwtEncoder,
+        AuthenticationManagerBuilder authenticationManagerBuilder,
+        UserService userService
+    ) {
         this.jwtEncoder = jwtEncoder;
         this.authenticationManagerBuilder = authenticationManagerBuilder;
+        this.userService = userService;
     }
 
     @PostMapping("/authenticate")
-    public ResponseEntity<JWTToken> authorize(@Valid @RequestBody LoginVM loginVM) {
+    public ResponseEntity<AuthResponseDTO> authorize(@Valid @RequestBody LoginVM loginVM) {
         try {
             UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
                 loginVM.getUsername(),
@@ -66,7 +75,20 @@ public class AuthenticateController {
             String jwt = this.createToken(authentication, loginVM.isRememberMe());
             HttpHeaders httpHeaders = new HttpHeaders();
             httpHeaders.setBearerAuth(jwt);
-            return new ResponseEntity<>(new JWTToken(jwt), httpHeaders, HttpStatus.OK);
+
+            User user = userService.getUserWithAuthorities().orElseThrow(() -> new RuntimeException("User could not be found"));
+
+            AuthResponseDTO response = new AuthResponseDTO(
+                jwt,
+                user.getEmail(),
+                user.getFirstName(),
+                user.getLastName(),
+                user.getLogin(),
+                user.getImageUrl(),
+                user.getLangKey()
+            );
+
+            return new ResponseEntity<>(response, httpHeaders, HttpStatus.OK);
         } catch (Exception e) {
             throw new UsernameAndPasswordWrongException("Kullanıcı adı veya parola hatalı", "userManagement", "idexists");
         }
